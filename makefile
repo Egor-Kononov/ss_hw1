@@ -2,18 +2,23 @@ CC = gcc
 FLAGS = -Wall -g
 LIBOBJECTS = basicMath.o power.o myMath.h
 
-all:mains maind mymathd mymaths
+all:mains maind  
 
-mains: main.o mymaths
+mains: main.o libmyMath.a
 	$(CC) $(FLAGS) -o mains main.o libmyMath.a
 
-maind:main.o mymathd
+maind:main.o libmyMath.so
 	$(CC) $(FLAGS) -o maind main.o ./libmyMath.so
 
-mymaths:$(LIBOBJECTS) 
+mymathd: libmyMath.a
+
+mymaths: libmyMath.so
+
+
+libmyMath.a: main.o $(LIBOBJECTS)
 	ar -rcs libmyMath.a $(LIBOBJECTS)
 
-mymathd:$(LIBOBJECTS)
+libmyMath.so:$(LIBOBJECTS) main.o
 	$(CC) -shared -o libmyMath.so $(LIBOBJECTS)
 
 main.o:main.c myMath.h
